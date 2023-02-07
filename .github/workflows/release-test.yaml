@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Echo
+      - name: Echoo
         id: versions
         run: |
           echo "Hello World!"
