@@ -48,7 +48,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    needs: prepare-versions
+    needs: release
     if: ${{ needs.release.outputs.TAG_STATUS == 'SUCCESS' }}
 
     outputs:
