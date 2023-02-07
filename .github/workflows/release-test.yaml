@@ -1,0 +1,21 @@
+name: VV Release [TEST]
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  prepare-versions:
+    name: Prepare versions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Echo
+        id: versions
+        run: |
+          echo "Hello World!"
