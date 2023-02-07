@@ -31,10 +31,12 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_SYSTEM_USER }}
 
       - name: Tag commit
+        id: tag-commit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx semantic-release
-          echo $PUBLISH
-          echo $SUCCESS
-          echo $FAIL
+
+      - name: Print sha
+        run: |
+          echo ${{ steps.tag-commit.outputs.STATUS }}
