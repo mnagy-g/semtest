@@ -37,6 +37,6 @@ jobs:
         run: |
           npx semantic-release
 
-      - name: Print sha
+      - name: Print result
         run: |
           echo ${{ steps.tag-commit.outputs.STATUS }}
