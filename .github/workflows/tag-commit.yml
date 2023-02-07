@@ -13,6 +13,10 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[skip:ci]')"
     name: Create Release
     runs-on: ubuntu-latest
+
+    outputs:
+      TAG_STATUS: ${{ steps.tag-commit.outputs.TAG_STATUS }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -39,4 +43,19 @@ jobs:
 
       - name: Print result
         run: |
-          echo ${{ steps.tag-commit.outputs.STATUS }}
+          echo ${{ steps.tag-commit.outputs.TAG_STATUS }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: prepare-versions
+    if: ${{ needs.release.outputs.TAG_STATUS == 'SUCCESS' }}
+
+    outputs:
+      TAG_STATUS: ${{ steps.tag-commit.outputs.TAG_STATUS }}
+
+    steps:
+      - name: Echo
+        id: versions
+        run: |
+          echo "Hello World!"

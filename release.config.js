@@ -13,9 +13,9 @@ module.exports = {
     [
       '@semantic-release/exec',
       {
-        publishCmd: 'echo "STATUS=PUBLISH" >> $GITHUB_OUTPUT',
-        successCmd: 'echo "STATUS=SUCCESS" >> $GITHUB_OUTPUT',
-        failCmd: 'echo "STATUS=FAIL" >> $GITHUB_OUTPUT',
+        publishCmd: 'echo "TAG_STATUS=PUBLISH" >> $GITHUB_OUTPUT',
+        successCmd: 'echo "TAG_STATUS=SUCCESS" >> $GITHUB_OUTPUT',
+        failCmd: 'echo "TAG_STATUS=FAIL" >> $GITHUB_OUTPUT',
       }
     ],
   ]
