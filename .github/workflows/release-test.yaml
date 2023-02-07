@@ -1,9 +1,9 @@
 name: VV Release [TEST]
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types:
+      - published
 
 permissions:
   id-token: write
@@ -15,7 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Echoo
-        id: versions
-        run: |
-          echo "Hello World!"
+      - name: Get release tag
+        id: get-tag
+        run: echo "RELEASE_TAG=${ GITHUB_REF#refs/tags/ }" >> $GITHUB_OUTPUT
+
+      - name: Print tag
+        run: echo "${{ steps.get-tag.outputs.RELEASE_TAG }}"
