@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Get release tag
         id: get-tag
-        run: echo "RELEASE_TAG=${ GITHUB_REF#refs/tags/ }" >> $GITHUB_OUTPUT
+        run: echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
       - name: Print tag
         run: echo "${{ steps.get-tag.outputs.RELEASE_TAG }}"
