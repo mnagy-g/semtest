@@ -18,7 +18,7 @@ jobs:
       - name: Trigger
         uses: mnagy-g/actiontest@master
         with:
-          token: ${{ secrets.ACTIONS_SYSTEM_USER }}
+          token: ${{ secrets.PERSONAL_TOKEN }}
           repository: "semtest"
           event-type: "test"
           client-payload: '{ "version": "test" }'
