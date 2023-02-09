@@ -19,6 +19,6 @@ jobs:
         uses: mnagy-g/actiontest@master
         with:
           token: ${{ secrets.PERSONAL_TOKEN }}
-          repository: "semtest"
-          event-type: "test"
+          repository: "dispatchtest"
+          event-type: "test-action"
           client-payload: '{ "version": "test" }'
