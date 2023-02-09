@@ -1,0 +1,24 @@
+name: Dispatch test
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  prepare-versions:
+    name: Dispatch test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger
+        uses: mnagy-g/actiontest@master
+        with:
+          token: ${{ secrets.ACTIONS_SYSTEM_USER }}
+          repository: "semtest"
+          event-type: "test"
+          client-payload: '{ "version": "test" }'
