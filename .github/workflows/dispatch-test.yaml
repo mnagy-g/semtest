@@ -19,6 +19,8 @@ jobs:
         uses: mnagy-g/actiontest@master
         with:
           token: ${{ secrets.PERSONAL_TOKEN }}
-          repository: "dispatchtest"
-          event-type: "test-action"
+          repository: dispatchtest
+          event-type: test-action
+          check-interval: 5s
+          timeout: 60s
           client-payload: '{ "version": "test" }'
