@@ -21,6 +21,4 @@ jobs:
           token: ${{ secrets.PERSONAL_TOKEN }}
           repository: dispatchtest
           event-type: test-action
-          check-interval: 5s
-          timeout: 60s
           client-payload: '{ "version": "test" }'
