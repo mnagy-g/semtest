@@ -2,7 +2,7 @@ name: release
 on:
   push:
     branches:
-      - test
+      - master
 
 permissions:
   id-token: write
@@ -16,6 +16,8 @@ jobs:
 
     outputs:
       TAG_STATUS: ${{ steps.tag-commit.outputs.TAG_STATUS }}
+      SEM_NEXT_VERSION: ${{ steps.tag-commit.outputs.SEM_NEXT_VERSION }}
+      SEM_LAST_VERSION: ${{ steps.tag-commit.outputs.SEM_LAST_VERSION }}
 
     steps:
       - name: Checkout repository
@@ -44,15 +46,14 @@ jobs:
       - name: Print result
         run: |
           echo ${{ steps.tag-commit.outputs.TAG_STATUS }}
+          echo ${{ steps.tag-commit.outputs.SEM_NEXT_VERSION }}
+          echo ${{ steps.tag-commit.outputs.SEM_LAST_VERSION }}
 
   test:
     name: Test
     runs-on: ubuntu-latest
     needs: release
     if: ${{ needs.release.outputs.TAG_STATUS == 'SUCCESS' }}
-
-    outputs:
-      TAG_STATUS: ${{ steps.tag-commit.outputs.TAG_STATUS }}
 
     steps:
       - name: Echo
