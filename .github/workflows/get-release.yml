@@ -29,6 +29,8 @@ jobs:
               repo: context.repo.repo,
             })
             
+            console.log(releases)
+            
             core.setOutput('RELEASE_ID', releases[0].id)
             core.setOutput('RELEASE_TAG', releases[0].tag_name)
 
