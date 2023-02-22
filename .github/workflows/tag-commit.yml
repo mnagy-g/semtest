@@ -76,5 +76,5 @@ jobs:
             github.rest.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/tags/v${{ needs.release.outputs.SEM_NEXT_VERSION }}',
+              ref: 'tags/v${{ needs.release.outputs.SEM_NEXT_VERSION }}',
             })
