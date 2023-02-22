@@ -1,8 +1,9 @@
-name: now
+name: release
 
 on:
   release:
-    types: [published]
+    types:
+      - published
 
 permissions:
   id-token: write
@@ -45,7 +46,7 @@ jobs:
             await github.rest.repos.deleteRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag: '${{ steps.existing-release.outputs.PUBLISHED_RELEASE_ID }}'
+              release_id: '${{ steps.existing-release.outputs.PUBLISHED_RELEASE_ID }}'
             })
 
       - name: Get previous (now latest) release
