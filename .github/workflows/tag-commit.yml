@@ -63,7 +63,9 @@ jobs:
   revert:
     name: Revert
     runs-on: ubuntu-latest
-    needs: release
+    needs:
+      - release
+      - error
     if: failure()
 
     steps:
