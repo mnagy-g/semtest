@@ -35,7 +35,7 @@ jobs:
               tag: '${{ steps.get-tag.outputs.RELEASE_TAG }}'
             })
             
-            console.log(release)
+            console.log(release.html_url)
             
             core.setOutput('PUBLISHED_RELEASE_ID', release.id)
 
@@ -49,7 +49,7 @@ jobs:
               release_id: ${{ steps.existing-release.outputs.PUBLISHED_RELEASE_ID }}
             })
 
-      - name: Get previous (now latest) release
+      - name: Get and update previous (now latest) release
         id: get-release
         uses: actions/github-script@v6
         with:
@@ -60,9 +60,11 @@ jobs:
               per_page: 100,
             })
             
-            const [release] = releases.sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
+            const [release] = releases
+            .filter(r => !r.prerelease && !r.draft)
+            .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
 
-            console.log(release)
+            console.log(release.html_url)
             
             await github.rest.repos.updateRelease({
               owner: context.repo.owner,
