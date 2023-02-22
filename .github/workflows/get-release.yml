@@ -60,7 +60,7 @@ jobs:
               per_page: 100,
             })
             
-            const [release] = releases.sort((a, b) => new Date(a.published_at).getTime() - new Date(b.published_at).getTime())
+            const [release] = releases.sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
 
             console.log(release)
             
