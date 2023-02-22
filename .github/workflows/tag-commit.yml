@@ -49,8 +49,8 @@ jobs:
           echo ${{ steps.tag-commit.outputs.SEM_NEXT_VERSION }}
           echo ${{ steps.tag-commit.outputs.SEM_LAST_VERSION }}
 
-  test:
-    name: Test
+  error:
+    name: Error
     runs-on: ubuntu-latest
     needs: release
     if: ${{ needs.release.outputs.TAG_STATUS == 'SUCCESS' }}
@@ -58,5 +58,21 @@ jobs:
     steps:
       - name: Echo
         id: versions
-        run: |
-          echo "Hello World!!"
+        run: exit 1
+
+  revert:
+    name: Revert
+    runs-on: ubuntu-latest
+    needs: release
+    if: failure()
+
+    steps:
+      - name: Delete tag
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ needs.release.outputs.SEM_NEXT_VERSION }}',
+            })
