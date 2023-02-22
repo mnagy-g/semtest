@@ -20,31 +20,20 @@ jobs:
 
     steps:
       - name: Get latest release
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const data = await github.rest.repos.getLatestRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            })
-            
-            console.log(data)
-
-      - name: Get release
         id: get-release
         uses: actions/github-script@v6
         with:
           script: |
-            const { data: releases } = await github.rest.repos.listReleases({
+            const { data: release } = await github.rest.repos.getLatestRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sort: 'published_at' 
             })
             
-            console.log(releases)
+            console.log(release)
             
-            core.setOutput('RELEASE_ID', releases[0].id)
-            core.setOutput('RELEASE_TAG', releases[0].tag_name)
+            core.setOutput('RELEASE_ID', release.id)
+            core.setOutput('RELEASE_TAG', release.tag_name)
 
       - name: Get result
         run: echo "${{steps.get-release.outputs.result}}"
