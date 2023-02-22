@@ -24,13 +24,13 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const releases = github.rest.repos.listReleases({
+            const releases = await github.rest.repos.listReleases({
               owner: context.repo.owner,
               repo: context.repo.repo,
             })
             
             return {
-              id: releases[0].id
+              id: releases[0].id,
               tag: releases[0].tag_name
             }
 
