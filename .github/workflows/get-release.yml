@@ -19,6 +19,17 @@ jobs:
 #      SEM_LAST_VERSION: ${{ steps.tag-commit.outputs.SEM_LAST_VERSION }}
 
     steps:
+      - name: Get latest release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const data = await github.rest.repos.getLatestRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            })
+            
+            console.log(data)
+
       - name: Get release
         id: get-release
         uses: actions/github-script@v6
