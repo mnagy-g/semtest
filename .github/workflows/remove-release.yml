@@ -27,21 +27,6 @@ jobs:
       - name: Print tag
         run: echo "${{ steps.get-tag.outputs.RELEASE_TAG }}"
 
-      - name: Get removed release
-        id: existing-release
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { data: release } = await github.rest.repos.getReleaseByTag({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag: '${{ steps.get-tag.outputs.RELEASE_TAG }}'
-            })
-            
-            console.log(release.html_url)
-            
-            core.setOutput('PUBLISHED_RELEASE_ID', release.id)
-
       - name: Get latest release
         id: latest-release
         uses: actions/github-script@v6
