@@ -43,7 +43,7 @@ jobs:
             core.setOutput('PUBLISHED_RELEASE_ID', release.id)
 
       - name: Get latest release
-        id: existing-release
+        id: latest-release
         uses: actions/github-script@v6
         with:
           script: |
