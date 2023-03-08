@@ -1,0 +1,32 @@
+name: release
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install
+        run: npm install
+
+      - name: Run API in background
+        run: npm run start &
+
+      - name: Run tests
+        run: curl localhost:3000
