@@ -30,3 +30,9 @@ jobs:
 
       - name: Run tests
         run: curl localhost:3000
+
+      - name: Run tests
+        run: curl localhost:3000
+
+      - name: Run tests
+        run: curl localhost:3000
