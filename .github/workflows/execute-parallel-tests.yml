@@ -9,30 +9,59 @@ permissions:
   contents: write
 
 jobs:
-  tests:
-    name: Run tests
+  check-cache:
+    name: Check for existing build
     runs-on: ubuntu-latest
 
+    outputs:
+      CACHE_HIT: ${{ steps.check-build.outputs.cache-hit }}
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Check for existing build
+        id: check-build
+        uses: actions/cache/restore@v3
         with:
-          node-version: 18
+          path: build
+          key: build-dev
 
-      - name: Install
-        run: npm install
+  build-frontend:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: check-cache
+    if: ${{ needs.check-cache.outputs.CACHE_HIT != 'true' }}
 
-      - name: Run API in background
-        run: npm run start &
+    steps:
+      - name: Create cache
+        run: |
+          mkdir build
+          echo test >> build/sample.txt
 
-      - name: Run tests
-        run: curl localhost:3000
+      - name: Cache build result
+        uses: actions/cache/save@v3
+        env:
+          cache-name: frontend-build
+        with:
+          path: build
+          key: build-dev
 
-      - name: Run tests
-        run: curl localhost:3000
+  load-cache:
+    name: Check for existing build
+    runs-on: ubuntu-latest
+    needs:
+      - check-cache
+      - build-frontend
+    if: always && (needs.build-frontend.result == skipped || needs.build-frontend.result == success) && needs.check-cache.result == success
 
-      - name: Run tests
-        run: curl localhost:3000
+
+    steps:
+      - name: Check for existing build
+        uses: actions/cache/restore@v3
+        with:
+          path: build
+          key: build-dev
+
+      - name: List result
+        run: |
+          ls -la
+          ls -la build
+
