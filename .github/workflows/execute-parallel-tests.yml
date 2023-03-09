@@ -50,7 +50,7 @@ jobs:
     needs:
       - check-cache
       - build-frontend
-    if: always() && (needs.build-frontend.outcome == 'skipped' || needs.build-frontend.outcome == 'success') && needs.check-cache.outcome == 'success'
+    if: always()
 
 
     steps:
