@@ -14,7 +14,8 @@ jobs:
   get:
     name: Get Release
     runs-on: ubuntu-latest
-    environment: production
+    environment:
+      name: production
 
 #    outputs:
 #      TAG_STATUS: ${{ steps.tag-commit.outputs.TAG_STATUS }}
