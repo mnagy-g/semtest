@@ -19,6 +19,9 @@ jobs:
     name: Bump and create PR
     runs-on: ubuntu-latest
 
+    outputs:
+      pr: ${{ steps.pr.outputs.result }}
+
     steps:
       - name: Print dispatch event payload
         run: |
@@ -83,5 +86,12 @@ jobs:
       - name: Get result
         run: | 
           echo "${{steps.pr.outputs.result}}"
-          echo "${{steps.pr.outputs.result.sha}}"
-          echo "${{steps.pr.outputs.result.checkId}}"
+          echo "${{fromJson(steps.pr.outputs.result).sha}}"
+          echo "${{fromJson(steps.pr.outputs.result).checkId}}"
+
+  test:
+    needs:
+      - release
+    uses: ./.github/workflows/test.yml
+    with:
+      ref: fromJson(needs.release.outputs.pr).sha
