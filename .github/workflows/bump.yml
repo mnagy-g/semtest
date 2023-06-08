@@ -75,7 +75,7 @@ jobs:
             const result = await github.rest.checks.create({
               owner,
               repo,
-              name: 'call-tests',
+              name: 'call-tests / Execute tests',
               head_sha: pr.data.head.sha,
               status: 'in_progress',
               started_at: new Date()
@@ -84,7 +84,7 @@ jobs:
             return { checkId: result.data.id, sha: pr.data.head.sha };
 
       - name: Get result
-        run: | 
+        run: |
           echo "${{steps.pr.outputs.result}}"
           echo "${{fromJson(steps.pr.outputs.result).sha}}"
           echo "${{fromJson(steps.pr.outputs.result).checkId}}"
@@ -113,13 +113,13 @@ jobs:
               owner,
               repo,
               check_run_id: '${{ fromJson(needs.release.outputs.pr).checkId }}',
-              name: 'call-tests',
+              name: 'call-tests / Execute tests',
               head_sha: '${{ fromJson(needs.release.outputs.pr).sha }}',
               status: 'completed',
               completed_at: new Date(),
               conclusion: 'success',
               output: {
-                title: 'call-tests',
+                title: 'call-tests / Execute tests',
                 summary: 'Success',
                 annotations: []
               }
@@ -143,13 +143,13 @@ jobs:
               owner,
               repo,
               check_run_id: '${{ fromJson(needs.release.outputs.pr).checkId }}',
-              name: 'call-tests',
+              name: 'call-tests / Execute tests',
               head_sha: '${{ fromJson(needs.release.outputs.pr).sha }}',
               status: 'completed',
               completed_at: new Date(),
               conclusion: 'failure',
               output: {
-                title: 'call-tests',
+                title: 'call-tests / Execute tests',
                 summary: 'Failed',
                 annotations: []
               }
