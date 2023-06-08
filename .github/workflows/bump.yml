@@ -45,11 +45,12 @@ jobs:
 
       - name: Create Pull Request
         uses: actions/github-script@v6
+        id: pr
         with:
           script: |
             const { repo, owner } = context.repo;
 
-            const result = await github.rest.pulls.create({
+            const pr = await github.rest.pulls.create({
               title: 'feat: bump components (${{ inputs.version }})',
               owner,
               repo,
@@ -61,20 +62,26 @@ jobs:
               ].join('\n')
             });
             
-            console.log(result);
-
             github.rest.issues.addLabels({
               owner,
               repo,
-              issue_number: result.data.number,
+              issue_number: pr.data.number,
               labels: ['bump']
             });
 
-            github.rest.checks.create({
+            const result = await github.rest.checks.create({
               owner,
               repo,
               name: 'call-tests',
-              head_sha: result.data.head.sha,
+              head_sha: pr.data.head.sha,
               status: 'in_progress',
               started_at: new Date()
             });
+            
+            return { checkId: result.data.id, sha: pr.data.head.sha };
+
+      - name: Get result
+        run: | 
+          echo "${{steps.pr.outputs.result}}"
+          echo "${{steps.pr.outputs.result.sha}}"
+          echo "${{steps.pr.outputs.result.checkId}}"

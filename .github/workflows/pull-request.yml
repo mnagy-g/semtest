@@ -11,9 +11,4 @@ permissions:
 
 jobs:
   call-tests:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Print hello world
-        run: |
-          echo "Hello world"
+    uses: ./.github/workflows/test.yml
