@@ -94,4 +94,33 @@ jobs:
       - release
     uses: ./.github/workflows/test.yml
     with:
-      ref: fromJson(needs.release.outputs.pr).sha
+      ref: ${{fromJson(needs.release.outputs.pr).sha}}
+
+  complete:
+    needs:
+      - test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Finish run
+        uses: actions/github-script@v6
+        id: pr
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+
+            github.rest.checks.update({
+              owner,
+              repo,
+              check_run_id: '${{ fromJson(steps.pr.outputs.result).checkId }}',
+              name: 'call-tests',
+              head_sha: pr.data.head.sha,
+              status: 'completed',
+              completed_at: new Date(),
+              conclusion: 'success',
+              output: {
+                title: 'call-tests',
+                summary: 'Done',
+                annotations: []
+              }
+            });
