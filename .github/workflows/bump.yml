@@ -120,7 +120,37 @@ jobs:
               conclusion: 'success',
               output: {
                 title: 'call-tests',
-                summary: 'Done',
+                summary: 'Success',
+                annotations: []
+              }
+            });
+
+  failure:
+    needs:
+      - release
+      - test
+    if: failure()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Finish run
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+
+            github.rest.checks.update({
+              owner,
+              repo,
+              check_run_id: '${{ fromJson(needs.release.outputs.pr).checkId }}',
+              name: 'call-tests',
+              head_sha: '${{ fromJson(needs.release.outputs.pr).sha }}',
+              status: 'completed',
+              completed_at: new Date(),
+              conclusion: 'failure',
+              output: {
+                title: 'call-tests',
+                summary: 'Failed',
                 annotations: []
               }
             });

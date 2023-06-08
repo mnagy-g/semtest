@@ -26,3 +26,7 @@ jobs:
       - name: Print hello world
         run: |
           echo "Hello world"
+
+      - name: Error
+        run: |
+          exit 1
