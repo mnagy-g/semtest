@@ -75,4 +75,6 @@ jobs:
               repo,
               name: 'call-tests',
               head_sha: result.data.head.sha,
+              status: 'in_progress',
+              started_at: new Date()
             });
