@@ -98,13 +98,13 @@ jobs:
 
   complete:
     needs:
+      - release
       - test
     runs-on: ubuntu-latest
 
     steps:
       - name: Finish run
         uses: actions/github-script@v6
-        id: pr
         with:
           script: |
             const { repo, owner } = context.repo;
@@ -112,9 +112,9 @@ jobs:
             github.rest.checks.update({
               owner,
               repo,
-              check_run_id: '${{ fromJson(steps.pr.outputs.result).checkId }}',
+              check_run_id: '${{ fromJson(needs.release.outputs.pr).checkId }}',
               name: 'call-tests',
-              head_sha: '${{ fromJson(steps.pr.outputs.result).sha }}',
+              head_sha: '${{ fromJson(needs.release.outputs.pr).sha }}',
               status: 'completed',
               completed_at: new Date(),
               conclusion: 'success',
