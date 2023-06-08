@@ -72,5 +72,5 @@ jobs:
               owner,
               repo,
               name: 'call-tests',
-              head_sha: result.head.sha,
+              head_sha: result.data.head.sha,
             });
