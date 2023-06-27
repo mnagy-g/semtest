@@ -1,0 +1,20 @@
+name: Serverless Delete example
+
+on:
+  delete:
+    branches:
+
+jobs:
+  deploy:
+    name: delete
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Github context
+        run: echo "${{ toJson(github) }}"
+
+      - name: Set Branch name
+        run: |
+          echo "${{ github.repository }} has ${{ github.event_path }} branch"
