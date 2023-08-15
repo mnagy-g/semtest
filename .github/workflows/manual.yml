@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     branches:
       - '**'
-      - '!main'
-    inputs:
-      branch:
-        description: 'The branch to build'
-        required: true
+      - '!master'
+#    inputs:
+#      branch:
+#        description: 'The branch to build'
+#        required: true
 
 permissions:
   id-token: write
