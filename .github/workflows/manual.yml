@@ -1,0 +1,25 @@
+name: Manual
+
+on:
+  workflow_dispatch:
+    branches:
+      - '**'
+      - '!main'
+    inputs:
+      branch:
+        description: 'The branch to build'
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  manual:
+    name: Execute tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print hello world
+        run: |
+          echo "Hello world"
