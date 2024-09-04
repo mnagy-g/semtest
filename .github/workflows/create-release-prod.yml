@@ -3,7 +3,7 @@ name: Bump
 on:
   repository_dispatch:
     types:
-      - test-action
+      - create-prod-release
 
 permissions:
   id-token: write
