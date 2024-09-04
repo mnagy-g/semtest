@@ -25,15 +25,14 @@ jobs:
 
       - name: Install
         run: npm install -D git-raw-commits conventional-commits-parser conventional-changelog-writer conventional-changelog-conventionalcommits
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_SYSTEM_USER }}
 
-      - name: Get release notes
+      - name: Create Pull Request
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.PERSONAL_TOKEN }}
           script: |
             const { repo, owner } = context.repo;
-            
+          
             const { getRawCommitsStream } = await import('git-raw-commits');
             const { parseCommitsStream } = await import('conventional-commits-parser');
             const { writeChangelogStream } = await import('conventional-changelog-writer');
@@ -56,20 +55,11 @@ jobs:
                 .on('end', () => resolve(result))
                 .on('error', reject)
             });
-            
-            console.log(commits.join('\n'));
 
-#      - name: Create Pull Request
-#        uses: actions/github-script@v6
-#        with:
-#          github-token: ${{ secrets.PERSONAL_TOKEN }}
-#          script: |
-#            const { repo, owner } = context.repo;
-#
-#            await github.rest.repos.createRelease({
-#              owner,
-#              repo,
-#              name: 'v1.19.0',
-#              tag_name: 'v1.19.0',
-#              body: commits.join('\n')
-#            });
+            await github.rest.repos.createRelease({
+              owner,
+              repo,
+              name: 'v1.19.0',
+              tag_name: 'v1.19.0',
+              body: commits.join('\n')
+            });
