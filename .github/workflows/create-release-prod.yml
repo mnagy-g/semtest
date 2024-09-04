@@ -1,0 +1,35 @@
+name: Bump
+
+on:
+  repository_dispatch:
+    types:
+      - test-action
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  release:
+    name: Create release from version
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print dispatch event payload
+        run: |
+          echo "version: ${{ inputs.version }}"
+
+      - name: Create Pull Request
+        uses: actions/github-script@v6
+        id: pr
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+
+            await github.rest.releases.create({
+              owner,
+              repo,
+              name: '${{ inputs.version }}',
+              tag_name: '${{ inputs.version }}',
+              generate_release_notes: true,
+            });
