@@ -80,8 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - tag-commit
-      - prepare-versions
-      - release
+      - execute-release
     if: failure()
 
     steps:
