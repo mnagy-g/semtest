@@ -21,6 +21,8 @@ jobs:
 
       - name: Create Pull Request
         uses: actions/github-script@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         with:
           script: |
             const { repo, owner } = context.repo;
