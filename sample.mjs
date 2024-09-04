@@ -16,7 +16,7 @@ export default async function doStuff(github, context) {
   const commits = await new Promise((resolve, reject) => {
     const result = [];
 
-    getRawCommitsStream({ from: release ? release.tag_name : '', to: 'v1.19.0', cwd: github.workspace })
+    getRawCommitsStream()
       .pipe(parseCommitsStream(preset.parser))
       .pipe(writeChangelogStream(undefined, preset.writer))
       .on('data', (data) => result.push(data))
