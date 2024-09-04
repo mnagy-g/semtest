@@ -21,12 +21,11 @@ jobs:
 
       - name: Create Pull Request
         uses: actions/github-script@v6
-        id: pr
         with:
           script: |
             const { repo, owner } = context.repo;
 
-            await github.rest.releases.create({
+            await github.rest.repos.createRelease({
               owner,
               repo,
               name: '${{ inputs.version }}',
