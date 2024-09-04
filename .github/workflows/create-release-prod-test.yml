@@ -1,9 +1,9 @@
 name: Create prod release
 
 on:
-  repository_dispatch:
-    types:
-      - create-prod-release
+  push:
+    branches:
+      - main
 
 permissions:
   id-token: write
@@ -15,10 +15,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print dispatch event payload
-        run: |
-          echo "version: ${{ github.event.client_payload.version }}"
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -37,30 +33,35 @@ jobs:
         with:
           github-token: ${{ secrets.PERSONAL_TOKEN }}
           script: |
-            const { getRawCommitsStream } = require('git-raw-commits');
-            const { parseCommitsStream } = require('conventional-commits-parser');
-            const { writeChangelogStream } = require('conventional-changelog-writer');
-            const createPreset = require('conventional-changelog-conventionalcommits');
+            const { repo, owner } = context.repo;
+          
+            const { getRawCommitsStream } = await import('git-raw-commits');
+            const { parseCommitsStream } = await import('conventional-commits-parser');
+            const { writeChangelogStream } = await import('conventional-changelog-writer');
+            const createPreset = await import('conventional-changelog-conventionalcommits');
+            
+            const { data: release } = await github.rest.repos.getLatestRelease({
+              owner,
+              repo,
+            });
             
             const preset = await createPreset();
             
             const commits = await new Promise((resolve, reject) => {
               const result = [];
             
-              getRawCommitsStream({})
+              getRawCommitsStream({ from: release ? release.tag_name : '', to: 'v1.19.0 })
                 .pipe(parseCommitsStream(preset.parser))
                 .pipe(writeChangelogStream(undefined, preset.writer))
                 .on('data', (data) => result.push(data))
                 .on('end', () => resolve(result))
                 .on('error', reject)
             });
-            
-            const { repo, owner } = context.repo;
 
             await github.rest.repos.createRelease({
               owner,
               repo,
-              name: '${{ github.event.client_payload.version }}',
-              tag_name: '${{ github.event.client_payload.version }}',
+              name: 'v1.19.0',
+              tag_name: 'v1.19.0',
               body: commits.join('\n')
             });

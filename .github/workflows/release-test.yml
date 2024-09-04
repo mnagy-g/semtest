@@ -3,7 +3,7 @@ name: Release TEST
 on:
   push:
     branches:
-      - main
+      - test
 
 permissions:
   id-token: write
@@ -23,8 +23,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
