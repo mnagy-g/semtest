@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Print dispatch event payload
         run: |
-          echo "version: ${{ inputs.version }}"
+          echo "version: ${{ github.event.client_payload.version }}"
 
       - name: Create Pull Request
         uses: actions/github-script@v6
@@ -28,7 +28,7 @@ jobs:
             await github.rest.repos.createRelease({
               owner,
               repo,
-              name: '${{ inputs.version }}',
-              tag_name: '${{ inputs.version }}',
+              name: '${{ github.event.client_payload.version }}',
+              tag_name: '${{ github.event.client_payload.version }}',
               generate_release_notes: true,
             });
