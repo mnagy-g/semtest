@@ -31,32 +31,9 @@ jobs:
         with:
           github-token: ${{ secrets.PERSONAL_TOKEN }}
           script: |
-            const { repo, owner } = context.repo;
-          
-            const { getRawCommitsStream } = await import('git-raw-commits');
-            const { parseCommitsStream } = await import('conventional-commits-parser');
-            const { writeChangelogStream } = await import('conventional-changelog-writer');
-            const createPreset = await import('conventional-changelog-conventionalcommits');
-            
-            const { data: release } = await github.rest.repos.getLatestRelease({
-              owner,
-              repo,
-            });
+            const { default: doStuff } = await import('${{ github.workspace }}/sample.mjs')
 
-            const preset = await createPreset();
-
-            const commits = await new Promise((resolve, reject) => {
-              const result = [];
-
-              getRawCommitsStream({ from: release ? release.tag_name : '', to: 'v1.19.0' })
-                .pipe(parseCommitsStream(preset.parser))
-                .pipe(writeChangelogStream(undefined, preset.writer))
-                .on('data', (data) => result.push(data))
-                .on('end', () => resolve(result))
-                .on('error', reject)
-            });
-
-            console.log(commits.join('\n'));
+            await doStuff(github, context)
 
 #            await github.rest.repos.createRelease({
 #              owner,
