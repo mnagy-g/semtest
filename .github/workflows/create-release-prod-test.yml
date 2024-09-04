@@ -27,7 +27,7 @@ jobs:
         run: npm install -D git-raw-commits conventional-commits-parser conventional-changelog-writer conventional-changelog-conventionalcommits
 
       - name: Create Pull Request
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.PERSONAL_TOKEN }}
           script: |
@@ -42,13 +42,13 @@ jobs:
               owner,
               repo,
             });
-            
+
             const preset = await createPreset();
-            
+
             const commits = await new Promise((resolve, reject) => {
               const result = [];
-            
-              getRawCommitsStream({ from: release ? release.tag_name : '', to: 'v1.19.0 })
+
+              getRawCommitsStream({ from: release ? release.tag_name : '', to: 'v1.19.0' })
                 .pipe(parseCommitsStream(preset.parser))
                 .pipe(writeChangelogStream(undefined, preset.writer))
                 .on('data', (data) => result.push(data))
@@ -56,10 +56,12 @@ jobs:
                 .on('error', reject)
             });
 
-            await github.rest.repos.createRelease({
-              owner,
-              repo,
-              name: 'v1.19.0',
-              tag_name: 'v1.19.0',
-              body: commits.join('\n')
-            });
+            console.log(commits.join('\n'));
+
+#            await github.rest.repos.createRelease({
+#              owner,
+#              repo,
+#              name: 'v1.19.0',
+#              tag_name: 'v1.19.0',
+#              body: commits.join('\n')
+#            });
