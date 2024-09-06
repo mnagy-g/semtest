@@ -12,7 +12,7 @@ permissions:
 jobs:
   test-env:
     name: Test env
-    uses: .github/workflows/r_test-env.yml
+    uses: .github/workflows/r_test-env.yml@main
     with:
       env: |
         VITE_APP_NAME="app name"
