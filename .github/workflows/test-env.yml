@@ -10,6 +10,18 @@ permissions:
   contents: write
 
 jobs:
+  env-setup:
+    name: Setup Dynamic Environment Variables
+    runs-on: ubuntu-latest
+    steps:
+      - name: set outputs with default values
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: |
+          STATUS=$GOOGLE_MAPS_API_KEY
+          echo "::add-mask::$STATUS"
+          echo "STATUS=$STATUS" >> "$GITHUB_ENV"
+
   test-env:
     name: Test env
     uses: ./.github/workflows/r_test-env.yml
@@ -17,5 +29,5 @@ jobs:
       env: |
         VITE_APP_NAME="app name"
         VITE_APP_VERSION="v1.0.0"
-        GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
+        GOOGLE_MAPS_API_KEY=${{ env.STATUS }}
     secrets: inherit
