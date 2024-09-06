@@ -1,0 +1,21 @@
+name: Release TEST
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  test-env:
+    name: Test env
+    uses: .github/workflows/r_test-env.yml
+    with:
+      env: |
+        VITE_APP_NAME="app name"
+        VITE_APP_VERSION="v1.0.0"
+        GOOGLE_MAPS_API_KEY="${{ secrets.GOOGLE_MAPS_API_KEY }}"
+    secrets: inherit

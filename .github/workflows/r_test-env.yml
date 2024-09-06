@@ -1,0 +1,30 @@
+name: Release TEST
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        description: Env
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  test:
+    name: Test ENV
+    runs-on: ubuntu-latest
+    needs:
+      - tag-commit
+      - execute-release
+
+    steps:
+      - name: Test ENV
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const inputs = ${{ toJSON(inputs) }};
+            console.log(inputs.env);
+
