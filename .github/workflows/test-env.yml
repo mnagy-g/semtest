@@ -13,21 +13,28 @@ jobs:
   env-setup:
     name: Setup Dynamic Environment Variables
     runs-on: ubuntu-latest
+
+    outputs:
+      STATUS: ${{ steps.env-setup.outputs.STATUS }}
+
     steps:
       - name: set outputs with default values
+        id: env-setup
         env:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
         run: |
           STATUS=$GOOGLE_MAPS_API_KEY
           echo "::add-mask::$STATUS"
-          echo "STATUS=$STATUS" >> "$GITHUB_ENV"
+          echo "STATUS=$STATUS" >> $GITHUB_OUTPUT
 
   test-env:
     name: Test env
     uses: ./.github/workflows/r_test-env.yml
+    needs:
+      - env-setup
     with:
       env: |
         VITE_APP_NAME="app name"
         VITE_APP_VERSION="v1.0.0"
-        GOOGLE_MAPS_API_KEY=${{ env.STATUS }}
+        GOOGLE_MAPS_API_KEY=${{ needs.env-setup.outputs.STATUS }}
     secrets: inherit
