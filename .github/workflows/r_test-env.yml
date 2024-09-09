@@ -22,7 +22,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test Condition
+      - name: Test Condition with version
+        if: ${{ inputs.version != '' }}
+        run: |
+          echo "Env: ${{ inputs.version || github.sha }}"
+
+      - name: Test Condition without version
+        if: ${{ inputs.version == '' }}
         run: |
           echo "Env: ${{ inputs.version || github.sha }}"
 
