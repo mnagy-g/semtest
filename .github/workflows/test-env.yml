@@ -13,8 +13,6 @@ jobs:
   test-without-version:
     name: Without version
     uses: ./.github/workflows/r_test-env.yml
-    needs:
-      - env-setup
     with:
       env: |
         VITE_APP_NAME="app name"
@@ -24,8 +22,6 @@ jobs:
   test-with-version:
     name: With version
     uses: ./.github/workflows/r_test-env.yml
-    needs:
-      - env-setup
     with:
       version: 1.2.3
       env: |
