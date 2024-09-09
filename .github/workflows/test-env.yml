@@ -28,3 +28,12 @@ jobs:
         VITE_APP_NAME="app name"
         VITE_APP_VERSION="v1.0.0"
     secrets: inherit
+
+  test:
+    name: Test ENV
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test
+        run: |
+          echo "Repo name: ${{ github.event.repository.name }}"
