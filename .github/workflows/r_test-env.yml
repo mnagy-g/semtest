@@ -7,6 +7,10 @@ on:
         description: Env
         required: true
         type: string
+      version:
+        description: Env
+        required: false
+        type: string
 
 permissions:
   id-token: write
@@ -18,6 +22,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Test Condition
+        run: |
+          echo "Env: ${{ inputs.version || github.sha }}"
+
       - name: Test ENV
         uses: actions/github-script@v7
         with:
