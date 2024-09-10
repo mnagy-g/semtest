@@ -41,5 +41,5 @@ jobs:
         with:
           script: |
             const inputs = ${{ toJSON(inputs) }};
-            console.log(inputs.env.split('\n').map(e => e.split('=')).reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {}));
+            console.log(JSON.parse(inputs.env));
 
