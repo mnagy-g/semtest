@@ -41,5 +41,13 @@ jobs:
         with:
           script: |
             const inputs = ${{ toJSON(inputs) }};
-            console.log(JSON.parse(inputs.env));
+            
+            for (const [key, value] of Object.entries(JSON.parse(inputs.env))) {
+              console.log(`${key}: ${value}`);
+              core.exportVariable(key, value);
+            }
 
+      - name: Test
+        run: |
+          echo "VITE_APP_NAME: ${{ env.VITE_APP_NAME }}"
+          echo "VITE_APP_VERSION: ${{ env.VITE_APP_VERSION }}"
