@@ -40,14 +40,11 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const inputs = JSON.parse(${{ toJSON(inputs.env) }});
-            
-            console.log(inputs);
+            const env = JSON.parse(${{ toJSON(inputs.env) }});
 
-#            for (const [key, value] of Object.entries(JSON.parse(inputs.env))) {
-#              console.log(`${key}: ${value}`);
-#              core.exportVariable(key, value);
-#            }
+            for (const [key, value] of Object.entries(env)) {
+              core.exportVariable(key, value);
+            }
 
       - name: Test
         run: |
