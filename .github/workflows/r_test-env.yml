@@ -11,6 +11,11 @@ on:
         description: Env
         required: false
         type: string
+      environment:
+        description: Env
+        required: true
+        default: 'prod'
+        type: string
 
 permissions:
   id-token: write
@@ -19,6 +24,7 @@ permissions:
 jobs:
   test:
     name: Test ENV
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
 
     steps:
