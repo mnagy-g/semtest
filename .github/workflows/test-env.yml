@@ -49,5 +49,6 @@ jobs:
           cat Sample.csproj
           echo "SAAAAAA"
           xmlstarlet edit -L --update '//Project/PropertyGroup/Version' --value 'new value' Sample.csproj
+          sed -i '1d' Sample.csproj
           echo "SAAAAAA"
           cat Sample.csproj
