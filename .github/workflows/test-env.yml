@@ -3,7 +3,7 @@ name: Release TEST
 on:
   push:
     branches:
-      - main
+      - unused
 
 permissions:
   id-token: write
