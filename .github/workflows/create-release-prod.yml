@@ -21,46 +21,5 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - name: Install
-        run: npm install -D git-raw-commits conventional-commits-parser conventional-changelog-writer conventional-changelog-conventionalcommits
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_SYSTEM_USER }}
-
-      - name: Create Pull Request
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.PERSONAL_TOKEN }}
-          script: |
-            const { getRawCommitsStream } = require('git-raw-commits');
-            const { parseCommitsStream } = require('conventional-commits-parser');
-            const { writeChangelogStream } = require('conventional-changelog-writer');
-            const createPreset = require('conventional-changelog-conventionalcommits');
-            
-            const preset = await createPreset();
-            
-            const commits = await new Promise((resolve, reject) => {
-              const result = [];
-            
-              getRawCommitsStream({})
-                .pipe(parseCommitsStream(preset.parser))
-                .pipe(writeChangelogStream(undefined, preset.writer))
-                .on('data', (data) => result.push(data))
-                .on('end', () => resolve(result))
-                .on('error', reject)
-            });
-            
-            const { repo, owner } = context.repo;
-
-            await github.rest.repos.createRelease({
-              owner,
-              repo,
-              name: '${{ github.event.client_payload.version }}',
-              tag_name: '${{ github.event.client_payload.version }}',
-              body: commits.join('\n')
-            });
+          fetch-depth: 0

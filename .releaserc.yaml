@@ -1,5 +1,8 @@
 branches:
-  - main
+  - name: main
+  - name: '(feat|fix)/**'
+    prerelease: "${name.split('/').join('-').toLowerCase()}"
+    channel: 'alpha'
 
 plugins:
   - - '@semantic-release/commit-analyzer'
@@ -10,5 +13,5 @@ plugins:
           - 'BREAKING CHANGES'
           - 'BREAKING'
   - - '@semantic-release/exec'
-    - successCmd: 'echo "TAG_STATUS=SUCCESS" >> $GITHUB_OUTPUT && echo "SEM_NEXT_VERSION=${nextRelease.version}" >> $GITHUB_OUTPUT && echo "SEM_LAST_VERSION=${lastRelease.version}" >> $GITHUB_OUTPUT'
-      failCmd: 'echo "TAG_STATUS=FAIL" >> $GITHUB_OUTPUT'
+    - successCmd: 'echo "status=SUCCESS" >> $GITHUB_OUTPUT && echo "version=${nextRelease.version}" >> $GITHUB_OUTPUT && echo "last_version=${lastRelease.version}" >> $GITHUB_OUTPUT'
+      failCmd: 'echo "status=FAIL" >> $GITHUB_OUTPUT'
