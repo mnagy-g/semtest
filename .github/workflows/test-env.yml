@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code for building
+        uses: actions/checkout@v4
+
       - name: Trigger prod release
         uses: mnagy-g/actiontest@master
         with:
