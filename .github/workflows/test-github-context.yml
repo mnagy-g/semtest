@@ -21,4 +21,4 @@ jobs:
           script: |
             console.log('${{ github.event.client_payload.version }}');
             console.log('---');
-            console.log(context.payload);
+            console.log(context.payload.client_payload.version);
