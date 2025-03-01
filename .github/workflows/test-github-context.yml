@@ -1,0 +1,24 @@
+name: Create prod release
+
+on:
+  repository_dispatch:
+    types:
+      - test-github-context
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  release:
+    name: Create release from version
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print context
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.log('${{ github.event.client_payload.version }}');
+            console.log('---');
+            console.log(context.payload);

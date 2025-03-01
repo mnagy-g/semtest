@@ -2,53 +2,23 @@ name: Release TEST
 
 on:
   push:
-    branches:
-      - unused
+#    branches:
+#      - unused
 
 permissions:
   id-token: write
   contents: write
 
 jobs:
-#  test-without-version:
-#    name: Without version
-#    uses: ./.github/workflows/r_test-env.yml
-#    with:
-#      env: |
-#        {
-#          "VITE_APP_NAME": "app name",
-#          "VITE_APP_VERSION": "v1.0.0"
-#        }
-#    secrets: inherit
-#
-#  test-with-version:
-#    name: With version
-#    uses: ./.github/workflows/r_test-env.yml
-#    with:
-#      version: 1.2.3
-#      env: |
-#        {
-#          "VITE_APP_NAME": "app name",
-#          "VITE_APP_VERSION": "v1.0.0"
-#        }
-#      environment: test
-#    secrets: inherit
-
   test:
     name: Test ENV
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code for building
-        uses: actions/checkout@v4
-
-      - name: Test
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xmlstarlet
-          cat Sample.csproj
-          echo "SAAAAAA"
-          xmlstarlet edit -L --update '//Project/PropertyGroup/Version' --value 'new value' Sample.csproj
-          sed -i '1d' Sample.csproj
-          echo "SAAAAAA"
-          cat Sample.csproj
+      - name: Trigger prod release
+        uses: mnagy-g/actiontest@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: semtest
+          event-type: test-github-context
+          client-payload: '{ "version": "v123" }'
