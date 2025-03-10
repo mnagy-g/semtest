@@ -50,8 +50,7 @@ jobs:
         id: gen_output
         if: always()
         run: |
-          version="${{ matrix.test-suite }}"
-          echo "output_${version}='${{steps.set-result.outputs.result}}'" >> "$GITHUB_OUTPUT"
+          echo "output_${{ matrix.test-suite }}='${{steps.report.outputs.result}}'" >> "$GITHUB_OUTPUT"
 
   second:
     runs-on: ubuntu-latest
