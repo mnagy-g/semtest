@@ -26,7 +26,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: result
-          restore-keys: ${{ github.run_id }}-result
+          key: ${{ github.run_id }}-result
 
   second:
     name: Test ENV
@@ -37,7 +37,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: result
-          restore-keys: ${{ github.run_id }}-result
+          key: ${{ github.run_id }}-result
 
       - name: Install
         run: |
