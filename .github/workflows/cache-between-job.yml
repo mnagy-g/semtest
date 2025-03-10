@@ -26,6 +26,9 @@ jobs:
           - coordinator
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Install
         if: matrix.test-suite == 'claim-handler'
         run: exit 1
