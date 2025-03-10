@@ -39,7 +39,6 @@ jobs:
 
       - name: Generate report for suites
         id: report
-        if: always()
         uses: actions/github-script@v7
         with:
           script: |
