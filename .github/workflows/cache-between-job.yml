@@ -50,8 +50,8 @@ jobs:
           echo "output_${version}='${{steps.set-result.outputs.result}}'" >> "$GITHUB_OUTPUT"
 
   second:
-
     runs-on: ubuntu-latest
-    needs: [job1]
+    needs:
+      - sample
     steps:
-      - run: echo '${{ toJSON(needs.job1.outputs) }}'
+      - run: echo '${{ toJSON(needs.sample.outputs) }}'
