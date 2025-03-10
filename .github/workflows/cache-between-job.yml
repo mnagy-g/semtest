@@ -58,6 +58,9 @@ jobs:
     needs:
       - sample
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - run: echo '${{ toJSON(needs.sample.outputs) }}'
 
       - name: Generate report for suites
