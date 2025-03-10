@@ -29,6 +29,8 @@ jobs:
           key: ${{ github.run_id }}-result
 
   second:
+    needs:
+      - first
     name: Test ENV
     runs-on: ubuntu-latest
 
