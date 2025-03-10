@@ -48,12 +48,14 @@ jobs:
 
       - name: Generate output
         id: gen_output
+        if: always()
         run: |
           version="${{ matrix.test-suite }}"
           echo "output_${version}='${{steps.set-result.outputs.result}}'" >> "$GITHUB_OUTPUT"
 
   second:
     runs-on: ubuntu-latest
+    if: always()
     needs:
       - sample
     steps:
