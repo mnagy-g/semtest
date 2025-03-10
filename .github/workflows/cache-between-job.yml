@@ -11,12 +11,13 @@ permissions:
 
 jobs:
   sample:
-    name: Sample
-    runs-on: ubuntu-latest
     outputs:
       claim-handler: ${{ steps.report.outputs.claim-handler }}
       common: ${{ steps.report.outputs.common }}
       coordinator: ${{ steps.report.outputs.coordinator }}
+      customer: ${{ steps.report.outputs.customer }}
+      procurement: ${{ steps.report.outputs.procurement }}
+      surveyor: ${{ steps.report.outputs.surveyor }}
     strategy:
       fail-fast: false
       matrix:
@@ -24,6 +25,11 @@ jobs:
           - claim-handler
           - common
           - coordinator
+          - customer
+          - procurement
+          - surveyor
+    runs-on: ubuntu:latest
+    environment: azure
 
     steps:
       - name: Checkout repository
