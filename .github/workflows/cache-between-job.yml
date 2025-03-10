@@ -10,39 +10,48 @@ permissions:
   contents: read
 
 jobs:
-  first:
-    name: Create result and save to cache
+  sample:
+    name: Sample
     runs-on: ubuntu-latest
+    outputs:
+      output_claim-handler: ${{ steps.gen_output.outputs.output_claim-handler }}
+      output_common: ${{ steps.gen_output.outputs.output_common }}
+      output_coordinator: ${{ steps.gen_output.outputs.output_coordinator }}
+    strategy:
+      fail-fast: false
+      matrix:
+        test-suite:
+          - claim-handler
+          - common
+          - coordinator
 
     steps:
       - name: Install
-        run: |
-          mkdir result
-          echo "Hello world" >> result/sample.txt
-          ls -la
-          ls -la result
+        if: matrix.test-suite == 'claim-handler'
+        run: exit 1
 
-      - name: Cache result
-        uses: actions/upload-artifact@v4
+      - name: Install
+        if: matrix.test-suite != 'claim-handler'
+        run: echo "Hello"
+
+      - name: Generate report for suites
+        id: report
+        if: always()
+        uses: actions/github-script@v7
         with:
-          name: result
-          path: result
-          overwrite: true
+          script: |
+            const { getSuitesReport } = await import('${{ github.workspace }}/report.mjs')
+            return getSuitesReport();
+
+      - name: Generate output
+        id: gen_output
+        run: |
+          version="${{ matrix.test-suite }}"
+          echo "output_${version}='${{steps.set-result.outputs.result}}'" >> "$GITHUB_OUTPUT"
 
   second:
-    needs:
-      - first
-    name: Test ENV
+
     runs-on: ubuntu-latest
-
+    needs: [job1]
     steps:
-      - name: Load cache
-        uses: actions/download-artifact@v4
-        with:
-          name: result
-          path: something-something
-
-      - name: Install
-        run: |
-          ls -la
-          ls -la something-something
+      - run: echo '${{ toJSON(needs.job1.outputs) }}'
