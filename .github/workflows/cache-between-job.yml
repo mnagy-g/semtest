@@ -38,10 +38,10 @@ jobs:
       - name: Load cache
         uses: actions/cache@v4
         with:
-          path: result
+          path: something-something
           key: ${{ github.run_id }}-result
 
       - name: Install
         run: |
           ls -la
-          ls -la result
+          ls -la something-something
