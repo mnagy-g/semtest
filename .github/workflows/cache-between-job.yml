@@ -50,7 +50,7 @@ jobs:
         id: gen_output
         if: always()
         run: |
-          echo "${{ matrix.test-suite }}=${{steps.report.outputs.result}}" >> "$GITHUB_OUTPUT"
+          echo "${{ matrix.test-suite }}='${{steps.report.outputs.result}}'" >> "$GITHUB_OUTPUT"
 
   second:
     runs-on: ubuntu-latest
@@ -70,9 +70,10 @@ jobs:
         with:
           script: |
             const { generateSummary, generateSlackMessage } = await import('${{ github.workspace }}/report.mjs')
+            const result = ${{ toJSON(needs.sample.outputs) }};
   
             const suites = Object
-              .values(${{ toJSON(needs.sample.outputs) }})
+              .values(result)
               .flatMap(result => {
                 try {
                   return JSON.parse(result);

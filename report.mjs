@@ -10,7 +10,25 @@ const getIcon = (status) => {
 };
 
 export const getSuitesReport = () => {
-  const suites = [];
+  const suites = [{
+    "name": "UI Test - Alerts dashboard"
+    , "passed": 2, "failed": 0, "failedTests": []
+  }, {
+    "name": "UI Test - Brand management",
+    "passed": 5,
+    "failed": 0,
+    "failedTests": []
+  }, {
+    "name": "UI Test - Concerns",
+    "passed": 6,
+    "failed": 0,
+    "failedTests": []
+  }, {
+    "name": "UI Test - Districts",
+    "passed": 12,
+    "failed": 0,
+    "failedTests": []
+  }, { "name": "UI Test - Workshop", "passed": 28, "failed": 0, "failedTests": [] }];
 
   return suites;
 };
