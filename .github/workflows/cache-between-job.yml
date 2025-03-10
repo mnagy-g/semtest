@@ -71,6 +71,6 @@ jobs:
           script: |
             const { generateSummary, generateSlackMessage } = await import('${{ github.workspace }}/report.mjs')
   
-            const results = JSON.parse(${{ toJSON(needs.sample.outputs) }});
+            const results = Object.values(${{ toJSON(needs.sample.outputs) }});
             
-            console.log(Object.values(results));
+            console.log(results);
