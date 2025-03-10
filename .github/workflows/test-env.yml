@@ -2,8 +2,8 @@ name: Release TEST
 
 on:
   push:
-#    branches:
-#      - unused
+    branches:
+      - unused
 
 permissions:
   id-token: write

@@ -1,0 +1,45 @@
+name: Cache between jobs
+
+on:
+  push:
+#    branches:
+#      - unused
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  first:
+    name: Create result and save to cache
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install
+        run: |
+          mkdir result
+          echo "Hello world" >> result/sample.txt
+          ls -la
+          ls -la result
+
+      - name: Cache result
+        uses: actions/cache@v4
+        with:
+          path: result
+          restore-keys: ${{ github.run_id }}-result
+
+  second:
+    name: Test ENV
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Load cache
+        uses: actions/cache@v4
+        with:
+          path: result
+          restore-keys: ${{ github.run_id }}-result
+
+      - name: Install
+        run: |
+          ls -la
+          ls -la result
