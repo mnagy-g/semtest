@@ -14,9 +14,9 @@ jobs:
     name: Sample
     runs-on: ubuntu-latest
     outputs:
-      output_claim-handler: ${{ steps.gen_output.outputs.output_claim-handler }}
-      output_common: ${{ steps.gen_output.outputs.output_common }}
-      output_coordinator: ${{ steps.gen_output.outputs.output_coordinator }}
+      claim-handler: ${{ steps.gen_output.outputs.claim-handler }}
+      common: ${{ steps.gen_output.outputs.common }}
+      coordinator: ${{ steps.gen_output.outputs.coordinator }}
     strategy:
       fail-fast: false
       matrix:
@@ -50,7 +50,7 @@ jobs:
         id: gen_output
         if: always()
         run: |
-          echo "output_${{ matrix.test-suite }}='${{steps.report.outputs.result}}'" >> "$GITHUB_OUTPUT"
+          echo "${{ matrix.test-suite }}='${{steps.set-result.outputs.result}}'" >> "$GITHUB_OUTPUT"
 
   second:
     runs-on: ubuntu-latest
@@ -59,3 +59,15 @@ jobs:
       - sample
     steps:
       - run: echo '${{ toJSON(needs.sample.outputs) }}'
+
+      - name: Generate report for suites
+        id: report
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { generateSummary, generateSlackMessage } = await import('${{ github.workspace }}/report.mjs')
+  
+            const results = JSON.parse(${{ toJSON(needs.sample.outputs) }});
+            
+            console.log(Object.values(results));
