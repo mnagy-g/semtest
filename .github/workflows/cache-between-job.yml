@@ -14,9 +14,9 @@ jobs:
     name: Sample
     runs-on: ubuntu-latest
     outputs:
-      claim-handler: ${{ steps.gen_output.outputs.claim-handler }}
-      common: ${{ steps.gen_output.outputs.common }}
-      coordinator: ${{ steps.gen_output.outputs.coordinator }}
+      claim-handler: ${{ steps.report.outputs.claim-handler }}
+      common: ${{ steps.report.outputs.common }}
+      coordinator: ${{ steps.report.outputs.coordinator }}
     strategy:
       fail-fast: false
       matrix:
@@ -44,13 +44,9 @@ jobs:
         with:
           script: |
             const { getSuitesReport } = await import('${{ github.workspace }}/report.mjs')
-            return getSuitesReport();
-
-      - name: Generate output
-        id: gen_output
-        if: always()
-        run: |
-          echo "${{ matrix.test-suite }}=${{steps.report.outputs.result}}" >> "$GITHUB_OUTPUT"
+            const report = getSuitesReport();
+            
+            core.setOutput('${{ matrix.test-suite }}', JSON.stringify(report));
 
   second:
     runs-on: ubuntu-latest
