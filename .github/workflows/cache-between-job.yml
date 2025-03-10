@@ -50,7 +50,7 @@ jobs:
         id: gen_output
         if: always()
         run: |
-          echo "${{ matrix.test-suite }}='${{steps.report.outputs.result}}'" >> "$GITHUB_OUTPUT"
+          echo "${{ matrix.test-suite }}=${{steps.report.outputs.result}}" >> "$GITHUB_OUTPUT"
 
   second:
     runs-on: ubuntu-latest
@@ -71,6 +71,19 @@ jobs:
           script: |
             const { generateSummary, generateSlackMessage } = await import('${{ github.workspace }}/report.mjs')
   
-            const results = Object.values(${{ toJSON(needs.sample.outputs) }});
+            const suites = Object
+              .values(${{ toJSON(needs.sample.outputs) }})
+              .flatMap(result => {
+                try {
+                  return JSON.parse(result);
+                } catch (error) {
+                  return [];
+                }
+              });
+
+            const total = suites.reduce(
+              (acc, suite) => ({ passed: acc.passed + suite.passed, failed: acc.failed + suite.failed }),
+              { passed: 0, failed: 0 },
+            );
             
-            console.log(results);
+            console.log(suites, total) 

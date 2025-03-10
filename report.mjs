@@ -12,12 +12,7 @@ const getIcon = (status) => {
 export const getSuitesReport = () => {
   const suites = [];
 
-  const total = suites.reduce(
-    (acc, suite) => ({ passed: acc.passed + suite.passed, failed: acc.failed + suite.failed }),
-    { passed: 0, failed: 0 },
-  );
-
-  return { suites, total };
+  return suites;
 };
 
 export const generateSummary = (summary, suites, total) => {
